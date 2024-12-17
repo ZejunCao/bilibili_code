@@ -9,3 +9,5 @@
 注：jupyter文件中的图片如果无法显示可通过下面博客中了解详情
 
 文本博客链接可参考：[逐行讲解大模型解码超参数大全（temperature、top-k、top-p等所有参数）](https://blog.csdn.net/qq_41496421/article/details/142580960)
+
+![大模型解码策略所有超参数概览](解码策略.png)
