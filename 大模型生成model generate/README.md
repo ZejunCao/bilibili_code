@@ -7,3 +7,5 @@
 文本博客链接可参考：[逐行讲解大模型解码超参数大全（temperature、top-k、top-p等所有参数）](https://blog.csdn.net/qq_41496421/article/details/142346738)
 
 ![大模型解码策略所有超参数概览](model.generate执行逻辑.png)
+
+https://github.com/ZejunCao/bilibili_code/tree/main/大模型生成model%20generate
