@@ -229,15 +229,8 @@ def main():
             num_proc=16,  # 多进程处理，加快处理速度
             remove_columns=text_column_name,  # 删除原始数据集中的字段，若不删除，tokenize_function处理之后的数据长度必须和原始相同，否则会数量不一致报错
             load_from_cache_file=False,  # 是否从缓存加载，之前的处理都会缓存下来，这里可从上次的缓存加载，无需再次处理。注意若tokenize_function函数修改需重新处理
-            # logging_level="ERROR",
         )
     logger.info(f"tokenized_datasets: {tokenized_datasets}")
-    dataset_len = [len(d["input_ids"]) for d in tokenized_datasets["train"]]
-    import numpy as np
-    logger.info(f"dataset_count: {len(dataset_len)}")
-    logger.info(f"dataset_len: {np.mean(dataset_len)}")
-    logger.info(f"dataset_len_max: {np.max(dataset_len)}")
-    logger.info(f"dataset_len_min: {np.min(dataset_len)}")
 
     # 将数据集拆分为训练集和验证集，若原始数据集中没有验证集，则从训练集中划分一部分作为验证集
     if "validation" not in tokenized_datasets:
