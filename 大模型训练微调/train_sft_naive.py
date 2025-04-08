@@ -162,6 +162,7 @@ def main():
                 continue
             # 获取bos_token_id的位置，用于后面构造label
             last_bos_index = torch.where(torch.tensor(format_inputs) == bos_token_id)[0][-1].tolist()
+            # 如果不进行过滤，也可以截断，这里自定义了一种截断方式，可以自行修改
             # if last_bos_index > data_args.cutoff_len-100:
             #     format_inputs = format_inputs[last_bos_index - data_args.cutoff_len+100:]
             #     format_inputs = format_inputs[:data_args.cutoff_len]
@@ -171,7 +172,7 @@ def main():
 
             # format_inputs = format_inputs + [tokenizer.eos_token_id] * (data_args.cutoff_len - len(format_inputs))
             # label_ids = label_ids + [-100] * (data_args.cutoff_len - len(label_ids))
-            # # 将处理后的数据添加到model_inputs中
+            # 将处理后的数据添加到model_inputs中
             model_inputs["input_ids"].append(format_inputs)
             model_inputs["attention_mask"].append([1] * len(format_inputs))
             model_inputs["labels"].append(label_ids)
@@ -185,9 +186,9 @@ def main():
         max_length = max(len(f["input_ids"]) for f in features)
 
         # 对齐不同batch的长度【右填充】
-        new_input_ids = [f["input_ids"] + [tokenizer.pad_token_id] * (max_length - len(f["input_ids"])) for f in features]
-        new_attention_mask = [f["attention_mask"] + [0] * (max_length - len(f["attention_mask"])) for f in features]
-        new_labels = [f["labels"] + [-100] * (max_length - len(f["labels"])) for f in features]
+        # new_input_ids = [f["input_ids"] + [tokenizer.pad_token_id] * (max_length - len(f["input_ids"])) for f in features]
+        # new_attention_mask = [f["attention_mask"] + [0] * (max_length - len(f["attention_mask"])) for f in features]
+        # new_labels = [f["labels"] + [-100] * (max_length - len(f["labels"])) for f in features]
 
         # 对齐不同batch的长度【左填充】
         new_input_ids = [[tokenizer.pad_token_id] * (max_length - len(f["input_ids"])) + f["input_ids"] for f in features]
@@ -231,12 +232,12 @@ def main():
             # logging_level="ERROR",
         )
     logger.info(f"tokenized_datasets: {tokenized_datasets}")
-    dataset_len = []
-    for i in range(len(tokenized_datasets["train"])):
-        dataset_len.append(len(tokenized_datasets["train"][i]["input_ids"]))
+    dataset_len = [len(d["input_ids"]) for d in tokenized_datasets["train"]]
     import numpy as np
     logger.info(f"dataset_count: {len(dataset_len)}")
     logger.info(f"dataset_len: {np.mean(dataset_len)}")
+    logger.info(f"dataset_len_max: {np.max(dataset_len)}")
+    logger.info(f"dataset_len_min: {np.min(dataset_len)}")
 
     # 将数据集拆分为训练集和验证集，若原始数据集中没有验证集，则从训练集中划分一部分作为验证集
     if "validation" not in tokenized_datasets:
