@@ -211,8 +211,9 @@ def main():
             # cache_dir=model_args.cache_dir,  # 缓存目录，用于存储下载的数据集
             # use_auth_token=True if model_args.use_auth_token else None,  # 是否使用认证令牌，例如用于huggingface上的私有数据集
         )
-    # 获取数据集中的字段，方便后面取出
-    text_column_name = list(raw_datasets["train"].features)  # 这里使用alpaca数据集格式，所以是['instruction', 'input', 'output']
+    # 获取数据集中的字段，方便后面取出. 
+    # 注：这里为保险最好手动指定，list(raw_datasets["train"].features) 可能出现顺序错乱的情况
+    text_column_name = ['instruction', 'input', 'output']  # 这里使用alpaca数据集格式，所以是['instruction', 'input', 'output']
 
     # 如果设置了max_train_samples或max_eval_samples，则只取部分数据
     if data_args.max_samples is not None:
