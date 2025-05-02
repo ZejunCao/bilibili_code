@@ -162,6 +162,7 @@ def main():
                 continue
             # 获取bos_token_id的位置，用于后面构造label
             last_bos_index = torch.where(torch.tensor(format_inputs) == bos_token_id)[0][-1].tolist()
+            # 如果不进行过滤，也可以截断，这里自定义了一种截断方式，可以自行修改
             # if last_bos_index > data_args.cutoff_len-100:
             #     format_inputs = format_inputs[last_bos_index - data_args.cutoff_len+100:]
             #     format_inputs = format_inputs[:data_args.cutoff_len]
@@ -171,7 +172,7 @@ def main():
 
             # format_inputs = format_inputs + [tokenizer.eos_token_id] * (data_args.cutoff_len - len(format_inputs))
             # label_ids = label_ids + [-100] * (data_args.cutoff_len - len(label_ids))
-            # # 将处理后的数据添加到model_inputs中
+            # 将处理后的数据添加到model_inputs中
             model_inputs["input_ids"].append(format_inputs)
             model_inputs["attention_mask"].append([1] * len(format_inputs))
             model_inputs["labels"].append(label_ids)
@@ -185,9 +186,9 @@ def main():
         max_length = max(len(f["input_ids"]) for f in features)
 
         # 对齐不同batch的长度【右填充】
-        new_input_ids = [f["input_ids"] + [tokenizer.pad_token_id] * (max_length - len(f["input_ids"])) for f in features]
-        new_attention_mask = [f["attention_mask"] + [0] * (max_length - len(f["attention_mask"])) for f in features]
-        new_labels = [f["labels"] + [-100] * (max_length - len(f["labels"])) for f in features]
+        # new_input_ids = [f["input_ids"] + [tokenizer.pad_token_id] * (max_length - len(f["input_ids"])) for f in features]
+        # new_attention_mask = [f["attention_mask"] + [0] * (max_length - len(f["attention_mask"])) for f in features]
+        # new_labels = [f["labels"] + [-100] * (max_length - len(f["labels"])) for f in features]
 
         # 对齐不同batch的长度【左填充】
         new_input_ids = [[tokenizer.pad_token_id] * (max_length - len(f["input_ids"])) + f["input_ids"] for f in features]
@@ -210,8 +211,9 @@ def main():
             # cache_dir=model_args.cache_dir,  # 缓存目录，用于存储下载的数据集
             # use_auth_token=True if model_args.use_auth_token else None,  # 是否使用认证令牌，例如用于huggingface上的私有数据集
         )
-    # 获取数据集中的字段，方便后面取出
-    text_column_name = list(raw_datasets["train"].features)  # 这里使用alpaca数据集格式，所以是['instruction', 'input', 'output']
+    # 获取数据集中的字段，方便后面取出. 
+    # 注：这里为保险最好手动指定，list(raw_datasets["train"].features) 可能出现顺序错乱的情况
+    text_column_name = ['instruction', 'input', 'output']  # 这里使用alpaca数据集格式，所以是['instruction', 'input', 'output']
 
     # 如果设置了max_train_samples或max_eval_samples，则只取部分数据
     if data_args.max_samples is not None:
@@ -228,15 +230,8 @@ def main():
             num_proc=16,  # 多进程处理，加快处理速度
             remove_columns=text_column_name,  # 删除原始数据集中的字段，若不删除，tokenize_function处理之后的数据长度必须和原始相同，否则会数量不一致报错
             load_from_cache_file=False,  # 是否从缓存加载，之前的处理都会缓存下来，这里可从上次的缓存加载，无需再次处理。注意若tokenize_function函数修改需重新处理
-            # logging_level="ERROR",
         )
     logger.info(f"tokenized_datasets: {tokenized_datasets}")
-    dataset_len = []
-    for i in range(len(tokenized_datasets["train"])):
-        dataset_len.append(len(tokenized_datasets["train"][i]["input_ids"]))
-    import numpy as np
-    logger.info(f"dataset_count: {len(dataset_len)}")
-    logger.info(f"dataset_len: {np.mean(dataset_len)}")
 
     # 将数据集拆分为训练集和验证集，若原始数据集中没有验证集，则从训练集中划分一部分作为验证集
     if "validation" not in tokenized_datasets:
