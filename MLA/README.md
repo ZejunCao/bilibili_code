@@ -1,3 +1,4 @@
+# 引言
 
 注意力机制作为大语言模型的核心组件，这么多年从最开始的 MHA 到现在最常用的 MQA、GQA，最主要的目的都是为了节省kv cache的大小。
 
@@ -17,6 +18,10 @@ MLA 内部涉及10多个矩阵，绕来绕去都晕了，每一步具体怎么�
 本文结合网络图和代码，一步一步详细讲解MLA都做了什么，那么多矩阵都是做什么用的，还请耐心观看。
 
 针对每一个token的注意力计算，都是一个重复的过程，那我们就取中间的一步进行模拟MLA计算。注意这里的维度大小我直接按照deepseek的参数写具体值，这样更为清晰。本文中的矩阵及向量命名都遵守deepseek的命名。
+
+# MLA 数据流向
+
+## MLA朴素版
 
 <font color="grayblue">首先介绍MLA的常规计算</font>
 
@@ -67,6 +72,8 @@ output = softmax(\frac{(h_tW^{DQ}W^{UQ})(c^{KV}W^{UK})^T}{\sqrt{d}}) (c^{KV}W^{U
 = softmax(\frac{h_tW^{DQ}W^{UQ}W^{UK^T}c^{KV^T}}{\sqrt{d}})c^{KV}W^{UV}W^{O}
 $$
 
+## MLA 吸收矩阵版
+
 <font color="grayblue">接下来介绍MLA吸收矩阵的计算方式</font>
 
 ![MLA 吸收矩阵计算结构图](https://s3.bmp.ovh/imgs/2025/05/02/aa6f1f91280160ce.png)
@@ -102,7 +109,8 @@ $$
 
 至此，MLA就介绍完了，现在你还能复述一遍 MLA 的计算流程吗？那些矩阵还能分得清吗？如果都能搞懂，说明你真得掌握了 MLA，可以去看看 flash MLA 了[狗头]。
 
-参考资料：
+# 参考资料
+
 1. [https://arxiv.org/pdf/2405.04434](!https://arxiv.org/pdf/2405.04434)
 2. [https://kexue.fm/archives/10091](!https://kexue.fm/archives/10091)
 3. [https://mp.weixin.qq.com/s/E7NwwMYw14FRT6OKzuVXFA](!https://mp.weixin.qq.com/s/E7NwwMYw14FRT6OKzuVXFA)
