@@ -1,3 +1,9 @@
+bilibili视频链接：https://www.bilibili.com/video/BV1jcVHzuE8v
+
+知乎博客链接：https://zhuanlan.zhihu.com/p/1901704483446187870
+
+CSDN博客链接：https://blog.csdn.net/qq_41496421/article/details/147682009
+
 # 引言
 
 注意力机制作为大语言模型的核心组件，这么多年从最开始的 MHA 到现在最常用的 MQA、GQA，最主要的目的都是为了节省kv cache的大小。
