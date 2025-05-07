@@ -14,7 +14,7 @@ class ModelArguments:
     """
     Arguments pertaining to which model/config/tokenizer we are going to fine-tune, or train from scratch.
     """
-    model_name_or_path: Optional[str] = field(default="/data0/zejun7/model_checkpoint/Qwen2.5-7B-Instruct")
+    model_name_or_path: Optional[str] = field(default=None, metadata={"help": "预训练模型路径"})
     model_type: Optional[str] = field(default=None, metadata={"help": "如果从头开始训练，请从列表中传递一个模型类型: " + ", ".join(MODEL_TYPES)})
     config_overrides: Optional[str] = field(
         default=None,
@@ -151,7 +151,6 @@ class DataTrainingArguments:
     keep_linebreaks: bool = field(
         default=True, metadata={"help": "Whether to keep line breaks when using TXT files or not."}
     )
-    cutoff_len: int = field(default=4096, metadata={"help": "输入输出拼接到一起之后的最大长度"})
 
     def __post_init__(self):
         if self.streaming:
