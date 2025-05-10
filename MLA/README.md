@@ -31,7 +31,7 @@ MLA 内部涉及10多个矩阵，绕来绕去都晕了，每一步具体怎么�
 
 <font color="grayblue">首先介绍MLA的常规计算</font>
 
-![MLA 朴素版数据流向图](https://s3.bmp.ovh/imgs/2025/05/02/11a583759cfc5c45.png)
+![MLA 朴素版数据流向图](https://s3.bmp.ovh/imgs/2025/05/11/e43c9410aa3800b9.png)
 
 1. 输入：首先注意力计算 forward 函数会输入隐层向量 hidden_state，记作$h_t$，它的维度是[1, 7168]，因为推理时是一个token一个token进行处理的。
    
@@ -83,7 +83,7 @@ $$
 
 <font color="grayblue">接下来介绍MLA吸收矩阵的计算方式</font>
 
-![MLA 吸收矩阵数据流向图](https://s3.bmp.ovh/imgs/2025/05/02/aa6f1f91280160ce.png)
+![MLA 吸收矩阵数据流向图](https://s3.bmp.ovh/imgs/2025/05/11/c68ab8efe28309a0.png)
 
 上面总体公式中 $W^{UQ}W^{UK^T}$ 是挨着的，$W^{UV}W^{O}$ 也是挨着的，所以可以提前合并成一个矩阵，记作$W^{UQK}$和$W^{UVO}$，这样每次推理就不用进行两次矩阵运算了，加快推理速度，这个就叫做吸收矩阵 **(absorb matrix)**。
 
