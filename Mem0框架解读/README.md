@@ -7,7 +7,7 @@
     - [3.3 embedding模型适配逻辑](#33-embedding模型适配逻辑)
 
 视频链接：
-- [GitHub 4.9万星 | mem0 开源框架架构解析与实战](https://www.bilibili.com/video/BV1nQQDB3EQ2)
+- [GitHub 4.9万星 | mem0 开源框架架构解析与实战](https://www.bilibili.com/video/BV135AAzHEPj)
 - [mem0 接入 MCP 的3种姿势：OpenMemory · mem0-mcp · FastAPI 自建](https://www.bilibili.com/video/BV135AAzHEPj)
 
 
