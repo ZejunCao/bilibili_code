@@ -1,3 +1,16 @@
+# 目录
+- [一、Mem0 简介](#一mem0-简介)
+- [二、快速 Demo：对话记忆存储](#二快速-demo对话记忆存储)
+- [三、数据库、LLM、embedding模型适配逻辑](#三数据库llmembedding模型适配逻辑)
+    - [3.1 数据库适配逻辑](#31-数据库适配逻辑)
+    - [3.2 LLM适配逻辑](#32-llm适配逻辑)
+    - [3.3 embedding模型适配逻辑](#33-embedding模型适配逻辑)
+
+视频链接：
+- [GitHub 4.9万星 | mem0 开源框架架构解析与实战](https://www.bilibili.com/video/BV16mYJzq_Gj)
+- [mem0 接入 MCP 的3种姿势：OpenMemory · mem0-mcp · FastAPI 自建](https://www.bilibili.com/video/BV135AAzHEPj)
+
+
 # 一、Mem0 简介
 
 Mem0 是一个为大模型应用设计的**长时记忆中间件**，它把「记忆」这件事从业务代码中抽离出来，变成一个独立、可配置的组件。简单理解，就是在 LLM 和各种向量数据库之间，加了一层“记忆管理层”：你只需要调用统一的 `Memory` 接口去 `add`、`search`、`get_all`，至于底层用的是哪家向量库、哪个 Embedding 服务、如何存历史记录、是否接图数据库，Mem0 都帮你封装好了。
