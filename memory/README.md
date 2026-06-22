@@ -6,4 +6,3 @@
 |--------|------|----------------|
 | [MemoryOS](./MemoryOS/) | MemoryOS 记忆流向交互演示（Vue 前端） | [MemoryOS](https://github.com/BAI-LAB/MemoryOS) |
 
-后续若录制 Mem0、其他记忆框架等内容，可在本目录下继续新增并列子文件夹，结构与 `MemoryOS/` 类似。
